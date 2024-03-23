@@ -1,6 +1,6 @@
 class Node {
-  constructor(head, next = null) {
-    this.head = head;
+  constructor(value, next = null) {
+    this.value = value;
     this.next = next;
   }
 }
@@ -22,19 +22,21 @@ class hashMap {
   }
 
   set(key, value) {
-    let index = this.hash(key) % 16;
+    let index = this.hash(key) % this.buckets.length;
 
     if (index < 0 || index >= this.buckets.length) {
       throw new Error("Trying to access index out of bound");
     }
 
-    console.log(index);
-
     if (this.buckets[index] === null) {
-      this.buckets[index] = value;
+      this.buckets[index] = new Node(value);
+    } else if (this.buckets[index] !== null) {
+      let curr = this.buckets[index];
+      while (curr.next !== null) {
+        curr = curr.next;
+      }
+      curr.next = new Node(value);
     }
-
-    console.log(this.buckets[index]);
   }
 }
 
@@ -43,7 +45,10 @@ const hashBucket = new hashMap();
 /* Set example*/
 
 hashBucket.set("Age", 32);
+hashBucket.set("Name", "Naja");
+hashBucket.set("Name", "God");
 hashBucket.set("Name", "Zin");
+
 hashBucket.set("Number", 5555);
 
 console.log(hashBucket.buckets);
