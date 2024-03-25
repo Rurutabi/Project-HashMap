@@ -1,5 +1,6 @@
 class Node {
-  constructor(value, next = null) {
+  constructor(key, value, next = null) {
+    this.key = key;
     this.value = value;
     this.next = next;
   }
@@ -23,19 +24,26 @@ class hashMap {
 
   set(key, value) {
     let index = this.hash(key) % this.buckets.length;
-
+    console.log(index);
     if (index < 0 || index >= this.buckets.length) {
       throw new Error("Trying to access index out of bound");
     }
 
+    //if bucket is still emoty
     if (this.buckets[index] === null) {
-      this.buckets[index] = new Node(value);
+      this.buckets[index] = new Node(key, value);
+      //if bucket is not empty
     } else if (this.buckets[index] !== null) {
       let curr = this.buckets[index];
-      while (curr.next !== null) {
+      //If first value is already existed but the key is different
+      while (curr.next !== null && curr.value !== value) {
         curr = curr.next;
       }
-      curr.next = new Node(value);
+      if (curr.value === value) {
+        curr.key = key;
+      } else {
+        curr.next = new Node(key, value);
+      }
     }
   }
 }
@@ -43,12 +51,6 @@ class hashMap {
 const hashBucket = new hashMap();
 
 /* Set example*/
-
-hashBucket.set("Age", 32);
 hashBucket.set("Name", "Naja");
-hashBucket.set("Name", "God");
-hashBucket.set("Name", "Zin");
-
-hashBucket.set("Number", 5555);
-
+hashBucket.set("Name", "Sira");
 console.log(hashBucket.buckets);
