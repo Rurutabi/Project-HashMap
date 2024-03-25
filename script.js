@@ -22,29 +22,50 @@ class hashMap {
     return hashCode;
   }
 
+  //Store linkedlist inside a bucket
   set(key, value) {
-    let index = this.hash(key) % this.buckets.length;
-    console.log(index);
-    if (index < 0 || index >= this.buckets.length) {
-      throw new Error("Trying to access index out of bound");
-    }
+    let index = this.getIndex(key);
 
-    //if bucket is still emoty
+    this.checkIndexLength(index);
+
+    //if selected bucket is still emoty
     if (this.buckets[index] === null) {
       this.buckets[index] = new Node(key, value);
       //if bucket is not empty
     } else if (this.buckets[index] !== null) {
       let curr = this.buckets[index];
-      //If first value is already existed but the key is different
-      while (curr.next !== null && curr.value !== value) {
+      //The while loop stop when next = null or duplicate key
+      while (curr.next !== null && curr.key !== key) {
         curr = curr.next;
       }
-      if (curr.value === value) {
-        curr.key = key;
+      if (curr.key === key) {
+        curr.value = value;
       } else {
         curr.next = new Node(key, value);
       }
     }
+  }
+
+  //Get selected value from the bucket
+  get(key) {
+    let index = this.getIndex(key);
+
+    let curr = this.buckets[index];
+
+    console.log(curr);
+  }
+
+  /*Helping method*/
+
+  //Check if index is out of bound
+  checkIndexLength(index) {
+    if (index < 0 || index >= this.buckets.length) {
+      throw new Error("Trying to access index out of bound");
+    }
+  }
+
+  getIndex(key) {
+    return this.hash(key) % this.buckets.length;
   }
 }
 
@@ -53,4 +74,7 @@ const hashBucket = new hashMap();
 /* Set example*/
 hashBucket.set("Name", "Naja");
 hashBucket.set("Name", "Sira");
+
+hashBucket.get("Name");
+
 console.log(hashBucket.buckets);
