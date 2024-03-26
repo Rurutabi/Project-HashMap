@@ -109,6 +109,50 @@ class hashMap {
     }
   }
 
+  length() {
+    let count = 0;
+
+    for (let element of this.buckets) {
+      if (element !== null) {
+        count = count + 1;
+      }
+
+      console.log(count);
+      // if (element !== null) {
+      //   let curr = element;
+
+      //   // while (curr.next !== null) {
+      //   //   curr = curr.next;
+      //   //   count = count + 1;
+      //   // }
+      //   count = count + 1;
+      //   return count;
+      // }
+    }
+  }
+
+  clear() {
+    for (let i = 0; i < this.buckets.length; i++) {
+      this.buckets[i] = null;
+    }
+  }
+
+  // keys() {
+  //   let arr = [];
+
+  //   for (let element of this.buckets) {
+  //     if (element !== null) {
+  //       let curr = element;
+  //       while (curr.next !== null) {
+  //         count = count + 1;
+  //         curr = curr.next;
+  //       }
+
+  //       return count;
+  //     }
+  //   }
+  // }
+
   /*Helping method*/
   //Check if index is out of bound
   checkIndexLength(index) {
@@ -135,11 +179,14 @@ const hashBucket = new hashMap(16);
 
 /* Set example*/
 hashBucket.set("Name", "Roy");
+hashBucket.set("Age", 26);
+hashBucket.set("Stree", "Rock Van Street");
 hashBucket.set("City", "Sydney");
 hashBucket.set("Try", "Hard");
 hashBucket.set("Dry", "Wet");
-hashBucket.remove("Try");
+console.log(hashBucket.length());
 
+// hashBucket.clear();
 // const temp = hashBucket.has("City");
 // console.log(temp);
 // hashBucket.hash();
