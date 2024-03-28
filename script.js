@@ -5,29 +5,22 @@ class Node {
     this.next = next;
   }
 }
-
 class hashMap {
   constructor(buckets) {
     this.buckets = new Array(buckets).fill(null);
   }
-
   hash(string) {
     let hashCode = 0;
-
     const primeNumber = 31;
     for (let i = 0; i < string.length; i++) {
       hashCode = primeNumber * hashCode + string.charCodeAt(i);
     }
-
     return hashCode;
   }
-
   //Store linkedlist inside a bucket
   set(key, value) {
     let index = this.getIndex(key);
-
     this.checkIndexLength(index);
-
     //if selected bucket is still emoty
     if (this.buckets[index] === null) {
       this.buckets[index] = new Node(key, value);
@@ -43,19 +36,14 @@ class hashMap {
       }
     }
   }
-
   //Get selected value from the bucket
   get(key) {
     let index = this.getIndex(key);
-
     let curr = this.buckets[index];
-
     //Return immeidately if bucket is null
     if (curr === null) return null;
-
     //Check index
     this.checkIndexLength(index);
-
     curr = this.traverseLinkedList(curr, key);
     //if the key is found return the value of requested key, false otherwise
     if (curr.key === key) {
@@ -64,13 +52,10 @@ class hashMap {
       return null;
     }
   }
-
   // Return true if the requested key exists, false otherwise
   has(key) {
     let index = this.getIndex(key);
-
     let curr = this.buckets[index];
-
     this.checkIndexLength(index);
     curr = this.traverseLinkedList(curr, key);
     if (curr.key === key) {
@@ -79,14 +64,12 @@ class hashMap {
       return false;
     }
   }
-
   //Remove request key and value
   remove(key) {
     let index = this.getIndex(key);
     let curr = this.buckets[index];
     this.checkIndexLength(index);
     let previous;
-
     this.checkIndexLength(index);
     //Check if first key = requested key
     if (curr.key === key) {
@@ -94,12 +77,10 @@ class hashMap {
       this.buckets[index] = curr;
       return true;
     }
-
     while (curr.next !== null && curr.key !== key) {
       previous = curr;
       curr = curr.next;
     }
-
     if (curr.key === key) {
       //Remvoe specific key and return true
       previous.next = curr.next;
@@ -108,51 +89,63 @@ class hashMap {
       return false;
     }
   }
-
   length() {
     let count = 0;
-
     for (let element of this.buckets) {
       if (element !== null) {
-        count = count + 1;
+        let curr = element;
+        while (curr !== null) {
+          count = count + 1;
+          curr = curr.next;
+        }
       }
-
-      console.log(count);
-      // if (element !== null) {
-      //   let curr = element;
-
-      //   // while (curr.next !== null) {
-      //   //   curr = curr.next;
-      //   //   count = count + 1;
-      //   // }
-      //   count = count + 1;
-      //   return count;
-      // }
     }
+    return count;
   }
-
   clear() {
     for (let i = 0; i < this.buckets.length; i++) {
       this.buckets[i] = null;
     }
   }
-
-  // keys() {
-  //   let arr = [];
-
-  //   for (let element of this.buckets) {
-  //     if (element !== null) {
-  //       let curr = element;
-  //       while (curr.next !== null) {
-  //         count = count + 1;
-  //         curr = curr.next;
-  //       }
-
-  //       return count;
-  //     }
-  //   }
-  // }
-
+  keys() {
+    let arr = [];
+    for (let element of this.buckets) {
+      if (element !== null) {
+        let curr = element;
+        while (curr !== null) {
+          arr.push(curr);
+          curr = curr.next;
+        }
+      }
+    }
+    return arr;
+  }
+  value() {
+    let arr = [];
+    for (let element of this.buckets) {
+      if (element !== null) {
+        let curr = element;
+        while (curr !== null) {
+          arr.push(curr.value);
+          curr = curr.next;
+        }
+      }
+    }
+    return arr;
+  }
+  entries() {
+    let arr = [];
+    for (let element of this.buckets) {
+      if (element !== null) {
+        let curr = element;
+        while (curr !== null) {
+          arr.push([curr.key, curr.value]);
+          curr = curr.next;
+        }
+      }
+    }
+    return arr;
+  }
   /*Helping method*/
   //Check if index is out of bound
   checkIndexLength(index) {
@@ -160,12 +153,10 @@ class hashMap {
       throw new Error("Trying to access index out of bound");
     }
   }
-
   //Calculate hash code
   getIndex(key) {
     return this.hash(key) % this.buckets.length;
   }
-
   //Travel through linkedlist
   traverseLinkedList(curr, key) {
     while (curr.next !== null && curr.key !== key) {
@@ -174,20 +165,13 @@ class hashMap {
     return curr;
   }
 }
-
 const hashBucket = new hashMap(16);
-
 /* Set example*/
 hashBucket.set("Name", "Roy");
 hashBucket.set("Age", 26);
-hashBucket.set("Stree", "Rock Van Street");
+hashBucket.set("Street", "Rock Van Street");
 hashBucket.set("City", "Sydney");
 hashBucket.set("Try", "Hard");
-hashBucket.set("Dry", "Wet");
-console.log(hashBucket.length());
-
-// hashBucket.clear();
-// const temp = hashBucket.has("City");
-// console.log(temp);
-// hashBucket.hash();
-console.log(hashBucket.buckets);
+// hashBucket.set("Dry", "Wet");
+const bucketLength = hashBucket.entries();
+console.log(bucketLength);
